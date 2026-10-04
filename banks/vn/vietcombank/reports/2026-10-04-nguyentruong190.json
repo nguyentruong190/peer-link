@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "1",
+  "provider": "vn/vietcombank",
+  "adapterRevision": "4fdf283611ec48d131e46377b214e85223e8a19e",
+  "harnessRevision": "4fdf283611ec48d131e46377b214e85223e8a19e",
+  "testedAt": "2026-10-04T02:00:00Z",
+  "reporter": "nguyentruong190",
+  "surface": "vcb-digibank-transaction-detail",
+  "capability": "outgoing-intrabank-vnd-transfer",
+  "outcome": "partial",
+  "evidenceClass": "contributor-live",
+  "fixtureRefs": [
+    "fixtures/valid-intrabank-transfer.synthetic.json",
+    "fixtures/pending.synthetic.json",
+    "fixtures/interbank.synthetic.json"
+  ],
+  "limitations": [
+    "One contributor account owner observed; no independent reviewer reproduction.",
+    "Only intra-bank (Vietcombank-to-Vietcombank) transfer rail is supported; interbank NAPAS 24/7 transfers abstain as unsupported.",
+    "Source authenticity, legal ownership, recipient credit and irreversible settlement are not proven.",
+    "Raw banking receipt screenshots and data remain local and are never committed."
+  ],
+  "summary": "Account owner tested VCB Digibank mobile app transaction receipts against the pure adapter. Verified that intra-bank transfers parse into supported payment observations with exact preserved status, sender account, and recipient account, while interbank NAPAS 24/7 transfers (e.g. to VietinBank, LPBank, MB) abstain cleanly with unsupported. Negative cases for pending, missing direction, and invalid statuses confirmed. No real banking credentials or personal data published."
+}

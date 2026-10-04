@@ -72,7 +72,7 @@
       "reportCount": 1,
       "evidence": [
         {
-          "scope": "ea592f17824272d4d328844bdaf9afc6b6083298:ea592f17824272d4d328844bdaf9afc6b6083298:vcb-digibank-transaction-detail:outgoing-intrabank-vnd-transfer",
+          "scope": "4fdf283611ec48d131e46377b214e85223e8a19e:4fdf283611ec48d131e46377b214e85223e8a19e:vcb-digibank-transaction-detail:outgoing-intrabank-vnd-transfer",
           "reports": [
             {
               "reporter": "nguyentruong190",
