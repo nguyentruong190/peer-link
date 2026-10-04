@@ -1,0 +1,34 @@
+{
+  "provenance": "synthetic",
+  "description": "Invented Vietcombank account numbers, transaction ID, timestamp, and amount; synthetic intra-bank transfer. Not a real payment.",
+  "input": {
+    "status": "success",
+    "amount": 2500000,
+    "currency": "VND",
+    "transactionId": "16000000001",
+    "direction": "outgoing",
+    "timestamp": "2026-09-14T00:49:00.000Z",
+    "transferType": "intra_bank",
+    "fee": 0,
+    "senderAccount": "000000000001",
+    "senderName": "Synthetic Sender NGUYEN VAN A",
+    "recipient": {
+      "accountNumber": "000000000002",
+      "name": "Synthetic Recipient TRAN THI B",
+      "bank": "Vietcombank",
+      "bankFullName": "Ngân hàng TMCP Ngoại Thương Việt Nam"
+    }
+  },
+  "transactionId": "16000000001",
+  "expected": {
+    "outcome": "supported",
+    "payerId": "000000000001",
+    "payeeId": "Vietcombank:000000000002",
+    "amountMinor": "2500000",
+    "currency": "VND",
+    "currencyExponent": 0,
+    "direction": "outgoing",
+    "status": "success",
+    "timestamp": "2026-09-14T00:49:00.000Z"
+  }
+}

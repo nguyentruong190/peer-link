@@ -1,0 +1,27 @@
+{
+  "provenance": "synthetic",
+  "description": "Synthetic Vietcombank interbank NAPAS 24/7 transfer to VietinBank based on observed VCB Digibank interbank transaction receipt; correctly unsupported.",
+  "input": {
+    "status": "Giao dịch thành công!",
+    "amount": 50400000,
+    "currency": "VND",
+    "transactionId": "15900000001",
+    "direction": "outgoing",
+    "timestamp": "12:11 Thứ Ba 08/09/2026",
+    "transferType": "Chuyển tiền nhanh 24/7",
+    "fee": 0,
+    "senderAccount": "000000000001",
+    "senderName": "Synthetic Sender NGUYEN TRI MINH",
+    "recipient": {
+      "accountNumber": "000000000003",
+      "name": "Synthetic Recipient NGUYEN THI MY LINH",
+      "bank": "VIETINBANK",
+      "bankFullName": "Ngân hàng TMCP Công Thương Việt Nam"
+    }
+  },
+  "transactionId": "15900000001",
+  "expected": {
+    "outcome": "unsupported",
+    "reason": "Only outgoing intra-bank (Vietcombank-to-Vietcombank) transfers are supported (got: Chuyển tiền nhanh 24/7)"
+  }
+}

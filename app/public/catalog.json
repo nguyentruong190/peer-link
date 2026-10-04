@@ -42,6 +42,49 @@
         }
       ],
       "source": "https://github.com/zkp2p/peer-link/tree/main/banks/us/mercury"
+    },
+    {
+      "schemaVersion": "1",
+      "id": "vn/vietcombank",
+      "name": "Vietcombank",
+      "country": "VN",
+      "status": "experimental",
+      "version": "0.1.0",
+      "surface": "vcb-digibank-transaction-detail",
+      "capability": "Interpret outgoing intra-bank VND transfers as sender-bank-reported completed payments",
+      "maintainers": [
+        "nguyentruong190"
+      ],
+      "currencies": [
+        "VND"
+      ],
+      "unsupported": [
+        "NAPAS 24/7 interbank transfers",
+        "incoming transfers",
+        "international wires",
+        "card transactions",
+        "loan repayments",
+        "standing orders",
+        "cryptographic source authentication"
+      ],
+      "fixtureProvenance": "synthetic",
+      "logo": "/logos/vietcombank.png",
+      "reportCount": 1,
+      "evidence": [
+        {
+          "scope": "ea592f17824272d4d328844bdaf9afc6b6083298:ea592f17824272d4d328844bdaf9afc6b6083298:vcb-digibank-transaction-detail:outgoing-intrabank-vnd-transfer",
+          "reports": [
+            {
+              "reporter": "nguyentruong190",
+              "outcome": "partial",
+              "evidenceClass": "contributor-live",
+              "testedAt": "2026-10-04T02:00:00Z"
+            }
+          ],
+          "distinctReportingHandles": 1
+        }
+      ],
+      "source": "https://github.com/zkp2p/peer-link/tree/main/banks/vn/vietcombank"
     }
   ]
 }

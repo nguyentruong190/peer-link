@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "1",
+  "id": "vn/vietcombank",
+  "name": "Vietcombank",
+  "country": "VN",
+  "status": "experimental",
+  "version": "0.1.0",
+  "surface": "vcb-digibank-transaction-detail",
+  "capability": "Interpret outgoing intra-bank VND transfers as sender-bank-reported completed payments",
+  "entrypoint": "interpretVietcombank",
+  "maintainers": ["nguyentruong190"],
+  "currencies": ["VND"],
+  "unsupported": [
+    "NAPAS 24/7 interbank transfers",
+    "incoming transfers",
+    "international wires",
+    "card transactions",
+    "loan repayments",
+    "standing orders",
+    "cryptographic source authentication"
+  ],
+  "fixtureProvenance": "synthetic",
+  "logo": "/logos/vietcombank.png"
+}

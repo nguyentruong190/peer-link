@@ -1,0 +1,27 @@
+{
+  "provenance": "synthetic",
+  "description": "Invented Vietcombank transfer with pending status; not a bank-reported completed payment.",
+  "input": {
+    "status": "pending",
+    "amount": 1000000,
+    "currency": "VND",
+    "transactionId": "16000000002",
+    "direction": "outgoing",
+    "timestamp": "2026-09-14T01:00:00.000Z",
+    "transferType": "intra_bank",
+    "fee": 0,
+    "senderAccount": "000000000001",
+    "senderName": "Synthetic Sender NGUYEN VAN A",
+    "recipient": {
+      "accountNumber": "000000000002",
+      "name": "Synthetic Recipient TRAN THI B",
+      "bank": "Vietcombank",
+      "bankFullName": "Ngân hàng TMCP Ngoại Thương Việt Nam"
+    }
+  },
+  "transactionId": "16000000002",
+  "expected": {
+    "outcome": "insufficient_evidence",
+    "reason": "Transaction is not bank-reported completed (got: pending)"
+  }
+}
