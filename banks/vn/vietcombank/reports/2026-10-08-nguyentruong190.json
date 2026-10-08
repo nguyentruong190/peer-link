@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "1",
+  "provider": "vn/vietcombank",
+  "adapterRevision": "246f9a171842626b8b7937630c55dd66facac4b4",
+  "harnessRevision": "246f9a171842626b8b7937630c55dd66facac4b4",
+  "testedAt": "2026-10-08T14:20:00Z",
+  "reporter": "nguyentruong190",
+  "surface": "vcb-digibank-transaction-detail",
+  "capability": "outgoing-intrabank-vnd-transfer",
+  "outcome": "partial",
+  "evidenceClass": "contributor-live",
+  "fixtureRefs": [
+    "fixtures/valid-intrabank-transfer.synthetic.json",
+    "fixtures/pending.synthetic.json",
+    "fixtures/interbank.synthetic.json"
+  ],
+  "limitations": [
+    "One contributor account owner observed; no independent reviewer reproduction.",
+    "Only intra-bank (Vietcombank-to-Vietcombank) transfer rail is supported; interbank NAPAS 24/7 transfers abstain as unsupported.",
+    "Source authenticity, legal ownership, recipient credit and irreversible settlement are not proven.",
+    "Raw banking receipt screenshots and data remain local and are never committed."
+  ],
+  "summary": "Rerun on clean adapter commit 246f9a171842626b8b7937630c55dd66facac4b4 following review feedback. Addressed timestamp calendar component round-trip validation and canonical payee ID namespace. Discrepancy clarification: previous report recorded 02:00:00Z before the adapter commit was created at 02:04:43Z; current report records the exact execution timestamp after the adapter commit. Observed fields from VCB receipt: status, amount, timestamp, transactionId, transferType, recipient (accountNumber, name, bank). Inferred/session context: senderAccount, senderName, direction. Intra-bank transfers parse into supported payment observations with exact preserved status, sender account, and canonical recipient account, while interbank transfers abstain cleanly with unsupported. Negative cases for pending, impossible dates, missing direction, and invalid statuses confirmed. No real banking credentials or personal data published."
+}
