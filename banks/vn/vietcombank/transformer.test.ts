@@ -116,13 +116,16 @@ describe("interpretVietcombank", () => {
     expect(interpretVietcombank(mbInput, TX_ID).outcome).toBe("unsupported");
   });
 
-  it("accepts known Vietcombank bank name aliases", () => {
+  it("accepts known Vietcombank bank name aliases and emits canonical payee.id", () => {
     for (const bankName of ["Vietcombank", "VCB", "Ngân hàng TMCP Ngoại Thương Việt Nam"]) {
       const res = interpretVietcombank(
         { ...validFixture, recipient: { ...validFixture.recipient, bank: bankName } },
         TX_ID,
       );
       expect(res.outcome).toBe("supported");
+      if (res.outcome === "supported") {
+        expect(res.payment.payee.id).toBe("Vietcombank:000000000002");
+      }
     }
   });
 
@@ -218,7 +221,7 @@ describe("interpretVietcombank", () => {
       expect(resGeneric.payment.timestamp).toBe("2026-09-14T00:49:00.000Z");
     }
 
-    // Invalid timestamps
+    // Invalid and impossible calendar timestamps
     expect(interpretVietcombank({ ...validFixture, timestamp: "not-a-date" }, TX_ID).outcome).toBe(
       "insufficient_evidence",
     );
@@ -230,7 +233,16 @@ describe("interpretVietcombank", () => {
         .outcome,
     ).toBe("insufficient_evidence");
     expect(
-      interpretVietcombank({ ...validFixture, timestamp: "2026-02-31 99:99:99" }, TX_ID).outcome,
+      interpretVietcombank({ ...validFixture, timestamp: "2026-02-31T12:00:00Z" }, TX_ID).outcome,
+    ).toBe("insufficient_evidence");
+    expect(
+      interpretVietcombank({ ...validFixture, timestamp: "2026-02-31 12:00:00" }, TX_ID).outcome,
+    ).toBe("insufficient_evidence");
+    expect(
+      interpretVietcombank({ ...validFixture, timestamp: "12:00 ThứBa 31/02/2026" }, TX_ID).outcome,
+    ).toBe("insufficient_evidence");
+    expect(
+      interpretVietcombank({ ...validFixture, timestamp: "2026-04-31T12:00:00Z" }, TX_ID).outcome,
     ).toBe("insufficient_evidence");
   });
 

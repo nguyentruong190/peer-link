@@ -144,6 +144,9 @@ export function interpretVietcombank(input, transactionId) {
   if (typeof payerName !== "string" || !nonempty(payerName))
     return fail("Sender name is missing or empty");
 
+  // Canonical bank namespace: ensure exact matching stability across all VCB bank name aliases
+  const CANONICAL_BANK_NAMESPACE = "Vietcombank";
+
   return {
     outcome: "supported",
     payment: {
@@ -156,7 +159,7 @@ export function interpretVietcombank(input, transactionId) {
         provenance: "transaction.senderAccount",
       },
       payee: {
-        id: `${payeeBank.trim()}:${payeeAccount.trim()}`,
+        id: `${CANONICAL_BANK_NAMESPACE}:${payeeAccount.trim()}`,
         scheme: "vn-bank-account",
         provenance: "transaction.recipient",
       },
@@ -181,10 +184,47 @@ export function interpretVietcombank(input, transactionId) {
 }
 
 /**
+ * Validate calendar components with a round-trip to reject impossible dates (e.g. Feb 31, Apr 31).
+ *
+ * @param {number} yyyy
+ * @param {number} mo 1-12
+ * @param {number} dd 1-31
+ * @param {number} hh 0-23
+ * @param {number} mm 0-59
+ * @param {number} ss 0-59
+ * @returns {boolean}
+ */
+function isValidCalendarComponents(yyyy, mo, dd, hh, mm, ss = 0) {
+  if (
+    mo < 1 ||
+    mo > 12 ||
+    dd < 1 ||
+    dd > 31 ||
+    hh < 0 ||
+    hh > 23 ||
+    mm < 0 ||
+    mm > 59 ||
+    ss < 0 ||
+    ss > 59
+  ) {
+    return false;
+  }
+  const check = new Date(Date.UTC(yyyy, mo - 1, dd, hh, mm, ss));
+  return (
+    check.getUTCFullYear() === yyyy &&
+    check.getUTCMonth() === mo - 1 &&
+    check.getUTCDate() === dd &&
+    check.getUTCHours() === hh &&
+    check.getUTCMinutes() === mm &&
+    check.getUTCSeconds() === ss
+  );
+}
+
+/**
  * Parse a VCB Digibank timestamp string into an ISO-8601 UTC string.
  *
  * Accepted formats:
- *   - "DD/MM/YYYY HH:MM" (Vietnamese locale, ICT = UTC+7)
+ *   - "DD/MM/YYYY HH:MM" or "HH:MM DayName DD/MM/YYYY" (Vietnamese locale, ICT = UTC+7)
  *   - "YYYY-MM-DDTHH:MM:SS[.mmm]Z" (ISO-8601)
  *   - "YYYY-MM-DD HH:MM:SS" (assumed ICT)
  *
@@ -196,9 +236,11 @@ function parseVcbTimestamp(raw) {
 
   // ISO-8601 with Z or offset
   const isoMatch = trimmed.match(
-    /^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,6})?(?:Z|[+-]\d{2}:?\d{2}))$/,
+    /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(?:\.\d{1,6})?(?:Z|[+-]\d{2}:?\d{2})$/,
   );
   if (isoMatch) {
+    const [, yyyy, mo, dd, hh, mm, ss] = isoMatch;
+    if (!isValidCalendarComponents(+yyyy, +mo, +dd, +hh, +mm, +ss)) return null;
     const date = new Date(trimmed);
     if (!Number.isFinite(date.getTime())) return null;
     return date.toISOString();
@@ -212,7 +254,7 @@ function parseVcbTimestamp(raw) {
     if (timeMatch && dateMatch) {
       const [, hh, mm] = timeMatch;
       const [, dd, mo, yyyy] = dateMatch;
-      if (+hh > 23 || +mm > 59 || +mo < 1 || +mo > 12 || +dd < 1 || +dd > 31) return null;
+      if (!isValidCalendarComponents(+yyyy, +mo, +dd, +hh, +mm, 0)) return null;
       const date = new Date(Date.UTC(+yyyy, +mo - 1, +dd, +hh - 7, +mm, 0));
       if (!Number.isFinite(date.getTime())) return null;
       return date.toISOString();
@@ -223,7 +265,7 @@ function parseVcbTimestamp(raw) {
   const genericMatch = trimmed.match(/^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2}):(\d{2})$/);
   if (genericMatch) {
     const [, yyyy, mo, dd, hh, mm, ss] = genericMatch;
-    if (+hh > 23 || +mm > 59 || +ss > 59 || +mo < 1 || +mo > 12 || +dd < 1 || +dd > 31) return null;
+    if (!isValidCalendarComponents(+yyyy, +mo, +dd, +hh, +mm, +ss)) return null;
     const date = new Date(Date.UTC(+yyyy, +mo - 1, +dd, +hh - 7, +mm, +ss));
     if (!Number.isFinite(date.getTime())) return null;
     return date.toISOString();
